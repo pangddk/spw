@@ -37,7 +37,7 @@ public class GamePanel extends JPanel {
 			big.setBackground(Color.BLACK);
 		}
 
-		big.drawString(String.format("Score = " + "%08d", reporter.getScore()), 300, 20);
+		big.drawString(String.format("Score = " + "%08d", reporter.getScore()), 250, 20);
 		
 		for(Sprite s : sprites){
 			s.draw(big);

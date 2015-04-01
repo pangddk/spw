@@ -15,12 +15,13 @@ public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
 		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
+	private ArrayList<Food> food = new ArrayList<Food>();
 	private SpaceShip v;	
 	
 	private Timer timer;
 	
 	private long score = 0;
-	private double difficulty = 0.5;
+	private double difficulty = 0.2;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
@@ -48,10 +49,17 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.add(e);
 		enemies.add(e);
 	}
+
+	private void generateFood(){								
+		Food f = new Food((int)(Math.random()*390), 20);
+		gp.sprites.add(f);
+		food.add(f);
+	}
 	
 	private void process(){
 		if(Math.random() < difficulty){
 			generateEnemy();
+			generateFood();
 		}
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
@@ -63,6 +71,18 @@ public class GameEngine implements KeyListener, GameReporter{
 				e_iter.remove();
 				gp.sprites.remove(e);
 				score += 1000;
+			}
+		}
+
+		Iterator<Food> f_iter = food.iterator();
+		while(f_iter.hasNext()){
+			Food f = f_iter.next();
+			f.proceed();
+
+			if(!f.isAlive()){
+				f_iter.remove();
+				gp.sprites.remove(f);
+				
 			}
 		}
 		
@@ -77,7 +97,16 @@ public class GameEngine implements KeyListener, GameReporter{
 				return;
 			}
 		}
+		Rectangle2D.Double fr;			
+		for(Food f : food){			
+			fr = f.getRectangle();
+			if(fr.intersects(vr)){
+				score += 500;
+				return;
+			}
+		}
 	}
+	
 	
 	public void die(){
 		timer.stop();
