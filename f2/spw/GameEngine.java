@@ -51,7 +51,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 
 	private void generateFood(){								
-		Food f = new Food((int)(Math.random()*390), 20);
+		Food f = new Food((int)(Math.random()*390), 5); 
 		gp.sprites.add(f);
 		food.add(f);
 	}
@@ -102,6 +102,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			fr = f.getRectangle();
 			if(fr.intersects(vr)){
 				score += 500;
+				f.notAlive();
 				return;
 			}
 		}
@@ -115,15 +116,23 @@ public class GameEngine implements KeyListener, GameReporter{
 	void controlVehicle(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
-			v.move(-1);
+			v.move_LR(-1);
 			break;
 		case KeyEvent.VK_RIGHT:
-			v.move(1);
+			v.move_LR(1);
 			break;
 		case KeyEvent.VK_D:
 			difficulty += 0.2;
+			break; 
+		case KeyEvent.VK_UP:		
+			v.move_UD(-1);
+			break;
+		case KeyEvent.VK_DOWN:			
+			v.move_UD(1);
 			break;
 		}
+		
+
 	}
 
 	public long getScore(){

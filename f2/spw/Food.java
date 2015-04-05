@@ -41,4 +41,8 @@ public class Food extends Sprite{
 	public boolean isAlive(){
 		return alive;
 	}
+	
+	public void notAlive(){ //****
+		alive = false;
+	}
 }
