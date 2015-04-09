@@ -42,7 +42,7 @@ public class Food extends Sprite{
 		return alive;
 	}
 	
-	public void notAlive(){ //****
+	public void notAlive(){ 
 		alive = false;
 	}
 }

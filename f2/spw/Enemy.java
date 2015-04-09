@@ -12,7 +12,7 @@ public class Enemy extends Sprite{
 	private boolean alive = true;
 	
 	public Enemy(int x, int y) {
-		super(x, y, 5, 15);
+		super(x, y, 8, 15);
 		
 	}
 
@@ -44,5 +44,8 @@ public class Enemy extends Sprite{
 	
 	public boolean isAlive(){
 		return alive;
+	}
+	public void notAlive(){ 
+		alive = false;
 	}
 }

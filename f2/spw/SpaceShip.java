@@ -33,5 +33,4 @@ public class SpaceShip extends Sprite{
 		if(y > 600 - height)
 			y = 600 - height;
 	}
-
 }
