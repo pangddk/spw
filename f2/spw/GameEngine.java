@@ -68,7 +68,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		if(Math.random() < difficulty){
 			generateEnemy();
 		}
-		if(Math.random() < 0.1){   					
+		if(Math.random() < 0.05){   					
 			generateFood();
 		}
 		Iterator<Enemy> e_iter = enemies.iterator();
@@ -154,7 +154,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			v.move_LR(1);
 			break;
 		case KeyEvent.VK_D:
-			difficulty += 0.2;
+			difficulty += 0.1;
 			break; 
 		case KeyEvent.VK_UP:		
 			v.move_UD(-1);

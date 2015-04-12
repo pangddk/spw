@@ -30,7 +30,7 @@ public class GamePanel extends JPanel {
 		}
 		else if(reporter.getScore() >= 10000 && reporter.getScore() < 100000){
 			big.setColor(Color.WHITE);
-			big.setBackground(Color.GRAY);	
+			big.setBackground(Color.BLUE);	
 		}
 		else{
 			big.setColor(Color.CYAN);

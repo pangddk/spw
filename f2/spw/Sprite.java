@@ -4,6 +4,11 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 public abstract class Sprite {
 	int x;
 	int y;
