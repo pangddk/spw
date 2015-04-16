@@ -19,7 +19,7 @@ public class Bullet extends Sprite{
 	BufferedImage img;
 
 	public Bullet(int x, int y){
-		super(x, y, 15, 25);
+		super(x, y, 15, 28);
 
 		try{
 			img = ImageIO.read(new File("f2/image/bl.png"));

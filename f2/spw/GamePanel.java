@@ -6,6 +6,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
@@ -14,30 +18,83 @@ public class GamePanel extends JPanel {
 	Graphics2D big;
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
+	BufferedImage h;
+
+	BufferedImage bg01;
+	BufferedImage bg02;
+	BufferedImage bg03;
+
+	
 	public GamePanel() {
 		bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
 		big = (Graphics2D) bi.getGraphics();
+ 
+		try{
+			h = ImageIO.read(new File("f2/image/heart.png"));
+		}
+		catch(IOException e){
 
-		big.setBackground(Color.WHITE);
+		}
+
+		try{
+			bg01 = ImageIO.read(new File("f2/image/bg01.jpg"));
+		}
+		catch(IOException e){
+
+		}
+
+		try{
+			bg02 = ImageIO.read(new File("f2/image/bg02.jpg"));
+		}
+		catch(IOException e){
+
+		}
+
+		try{
+			bg03 = ImageIO.read(new File("f2/image/bg03.jpg"));
+		}
+		catch(IOException e){
+
+		}
 
 	}
 
 	public void updateGameUI(GameReporter reporter){
 		big.clearRect(0, 0, 400, 600);
 		
-		if(reporter.getScore() < 10000){
+		reporter.getScore();
+
+		if(reporter.getScore() < 50000){
 			big.setColor(Color.RED);
+			big.drawImage(bg01, 0, 0, 400, 600, null);
 		}
-		else if(reporter.getScore() >= 10000 && reporter.getScore() < 100000){
+
+		else if(reporter.getScore() >= 50000 && reporter.getScore() < 100000){
 			big.setColor(Color.WHITE);
-			big.setBackground(Color.BLUE);	
+			big.drawImage(bg02, 0, 0, 400, 600, null);	
 		}
+
 		else{
 			big.setColor(Color.CYAN);
-			big.setBackground(Color.BLACK);
+			big.drawImage(bg03, 0, 0, 400, 600, null);
 		}
 
 		big.drawString(String.format("Score = " + "%08d", reporter.getScore()), 250, 20);
+		
+		if(reporter.getHeart() == 3){
+			big.drawImage(h, 10, 10, 20, 20, null);
+			big.drawImage(h, 40, 10, 20, 20, null);
+			big.drawImage(h, 70, 10, 20, 20, null);
+		}
+
+		else if(reporter.getHeart() == 2){
+			big.drawImage(h, 10, 10, 20, 20, null);
+			big.drawImage(h, 40, 10, 20, 20, null);
+		}
+
+		else if(reporter.getHeart() == 1){
+			big.drawImage(h, 10, 10, 20, 20, null);
+		}
 		
 		for(Sprite s : sprites){
 			s.draw(big);

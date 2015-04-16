@@ -37,14 +37,6 @@ public class Enemy extends Sprite{
 					(float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
 		}
 
-		/*if(Math.random() >= 0.5)
-			g.setColor(Color.RED);
-
-		else if(Math.random() < 0.5)
-			g.setColor(Color.YELLOW);
-		
-		g.fillRect(x, y, width, height);*/
-
 		g.drawImage(img, x, y, width, height, null);
 
 	}
