@@ -17,6 +17,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
 	private ArrayList<Food> food = new ArrayList<Food>();
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+	private ArrayList<StrongEnemy> sEnemy = new ArrayList<StrongEnemy>();
 
 	private SpaceShip v;	
 	
@@ -66,6 +67,12 @@ public class GameEngine implements KeyListener, GameReporter{
 		bullets.add(b);
 	}
 	
+	private void generateStrongEnemy(){								
+		StrongEnemy s = new StrongEnemy((int)(Math.random()*390), 30); 
+		gp.sprites.add(s);
+		sEnemy.add(s);
+	}
+
 	private void process(){
 		
 		if(v.y <= 100){
@@ -77,9 +84,15 @@ public class GameEngine implements KeyListener, GameReporter{
 		if(Math.random() < difficulty){
 			generateEnemy();
 		}
+
 		if(Math.random() < 0.05){   					
 			generateFood();
 		}
+
+		if(Math.random() < (difficulty - 0.17)){   					
+			generateStrongEnemy();
+		}
+
 		Iterator<Enemy> e_iter = enemies.iterator();
 		while(e_iter.hasNext()){
 			Enemy e = e_iter.next();
@@ -114,6 +127,18 @@ public class GameEngine implements KeyListener, GameReporter{
 			}
 		}
 
+		Iterator<StrongEnemy> s_iter = sEnemy.iterator();
+		while(s_iter.hasNext()){
+			StrongEnemy s = s_iter.next();
+			s.proceed();
+			
+			if(!s.isAlive()){
+				s_iter.remove();
+				gp.sprites.remove(s);
+				score += 3000;
+			}
+		}
+
 		gp.updateGameUI(this);
 		
 		Rectangle2D.Double vr = v.getRectangle();
@@ -121,10 +146,11 @@ public class GameEngine implements KeyListener, GameReporter{
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)){
-				e.notAlive();
-				score -= 1000;
-				if(heart > 0)
+				if(heart > 0){
+					e.notAlive();
+					score -= 1000;
 					heart--;
+				}
 				else
 					die();
 				return;
@@ -139,6 +165,7 @@ public class GameEngine implements KeyListener, GameReporter{
 				}
 			}
 		}
+
 		Rectangle2D.Double fr;			
 		for(Food f : food){			
 			fr = f.getRectangle();
@@ -149,6 +176,35 @@ public class GameEngine implements KeyListener, GameReporter{
 			}
 		}
 		
+		Rectangle2D.Double sr;
+		for(StrongEnemy s : sEnemy){
+			sr = s.getRectangle();
+			if(sr.intersects(vr)){
+				if(heart > 0){
+					s.notAlive();
+					score -= 1000;
+					heart--;
+				}
+				else
+					die();
+				return;
+			}
+			Rectangle2D.Double br;			
+			for(Bullet b : bullets){			
+				br = b.getRectangle();
+				if(br.intersects(sr)){
+					if(s.getLive() > 0){
+						s.lossLive();
+						score += 3000;
+					}
+					else{
+						score += 5000;
+						s.notAlive();
+					}
+					return;
+				}
+			}
+		}
 	}
 	
 	
