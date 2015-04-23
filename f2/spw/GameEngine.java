@@ -18,6 +18,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	private ArrayList<Food> food = new ArrayList<Food>();
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private ArrayList<StrongEnemy> sEnemy = new ArrayList<StrongEnemy>();
+	private ArrayList<BossEnemy> bEnemy = new ArrayList<BossEnemy>();
 
 	private SpaceShip v;	
 	
@@ -48,7 +49,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	public void start(){
 		timer.start();
 	}
-	
+
 	private void generateEnemy(){
 		Enemy e = new Enemy((int)(Math.random()*390), 30);
 		gp.sprites.add(e);
@@ -73,9 +74,15 @@ public class GameEngine implements KeyListener, GameReporter{
 		sEnemy.add(s);
 	}
 
+	private void generateBossEnemy(){								
+		BossEnemy be = new BossEnemy(0, (int)(Math.random()*500)); 
+		gp.sprites.add(be);
+		bEnemy.add(be);
+	}
+
 	private void process(){
 		
-		if(v.y <= 100){
+		if(v.y <= 60){
 			score += 10000;  // bonus score
 			v.x = 180;		 // back to start point
 			v.y = 550;
@@ -89,8 +96,11 @@ public class GameEngine implements KeyListener, GameReporter{
 			generateFood();
 		}
 
-		if(Math.random() < (difficulty - 0.17)){   					
+		if(Math.random() < (difficulty - 0.15)){   					
 			generateStrongEnemy();
+		}
+		if((Math.random() < (difficulty - 0.18)) && (score > 50000)){   					
+			generateBossEnemy();
 		}
 
 		Iterator<Enemy> e_iter = enemies.iterator();
@@ -136,6 +146,17 @@ public class GameEngine implements KeyListener, GameReporter{
 				s_iter.remove();
 				gp.sprites.remove(s);
 				score += 3000;
+			}
+		}
+		Iterator<BossEnemy> be_iter = bEnemy.iterator();
+		while(be_iter.hasNext()){
+			BossEnemy be = be_iter.next();
+			be.proceed();
+			
+			if(!be.isAlive()){
+				be_iter.remove();
+				gp.sprites.remove(be);
+				score += 5000;
 			}
 		}
 
@@ -200,6 +221,35 @@ public class GameEngine implements KeyListener, GameReporter{
 					else{
 						score += 5000;
 						s.notAlive();
+					}
+					return;
+				}
+			}
+		}
+		Rectangle2D.Double ber;
+		for(BossEnemy be : bEnemy){
+			ber = be.getRectangle();
+			if(ber.intersects(vr)){
+				if(heart > 0){
+					be.notAlive();
+					score -= 1000;
+					heart--;
+				}
+				else
+					die();
+				return;
+			}
+			Rectangle2D.Double br;			
+			for(Bullet b : bullets){			
+				br = b.getRectangle();
+				if(br.intersects(ber)){
+					if(be.getLive() > 0){
+						be.lossLive();
+						score += 5000;
+					}
+					else{
+						score += 5000;
+						be.notAlive();
 					}
 					return;
 				}

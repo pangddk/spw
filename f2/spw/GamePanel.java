@@ -23,10 +23,11 @@ public class GamePanel extends JPanel {
 	BufferedImage bg01;
 	BufferedImage bg02;
 	BufferedImage bg03;
+	BufferedImage bonus;
 
 	
 	public GamePanel() {
-		bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
+		bi = new BufferedImage(400, 650, BufferedImage.TYPE_INT_ARGB);
 		big = (Graphics2D) bi.getGraphics();
  
 		try{
@@ -56,6 +57,12 @@ public class GamePanel extends JPanel {
 		catch(IOException e){
 
 		}
+		try{
+			bonus = ImageIO.read(new File("f2/image/bonus_line.png"));
+		}
+		catch(IOException e){
+
+		}
 
 	}
 
@@ -64,20 +71,22 @@ public class GamePanel extends JPanel {
 		
 		reporter.getScore();
 
-		if(reporter.getScore() < 50000){
+		if(reporter.getScore() < 80000){
 			big.setColor(Color.RED);
-			big.drawImage(bg01, 0, 0, 400, 600, null);
+			big.drawImage(bg01, 0, 0, 400, 650, null);
 		}
 
-		else if(reporter.getScore() >= 50000 && reporter.getScore() < 100000){
+		else if(reporter.getScore() >= 80000 && reporter.getScore() < 160000){
 			big.setColor(Color.WHITE);
-			big.drawImage(bg02, 0, 0, 400, 600, null);	
+			big.drawImage(bg02, 0, 0, 400, 650, null);	
 		}
 
 		else{
 			big.setColor(Color.CYAN);
-			big.drawImage(bg03, 0, 0, 400, 600, null);
+			big.drawImage(bg03, 0, 0, 400, 650, null);
 		}
+
+		big.drawImage(bonus, 0, 60, 400, 40, null);
 
 		big.drawString(String.format("Score = " + "%08d", reporter.getScore()), 250, 20);
 		

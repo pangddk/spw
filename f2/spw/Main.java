@@ -1,8 +1,9 @@
 package f2.spw;
 
 import java.awt.BorderLayout;
-
-import javax.swing.JFrame;
+import javax.swing.*;
+import sun.audio.*;
+import java.io.*;
 
 public class Main {
 	public static void main(String[] args){
@@ -14,10 +15,13 @@ public class Main {
 		SpaceShip v = new SpaceShip(180, 550, 70, 50);
 		GamePanel gp = new GamePanel();
 		GameEngine engine = new GameEngine(gp, v);
+		new Sound();
+
 		frame.addKeyListener(engine);
 		frame.getContentPane().add(gp, BorderLayout.CENTER);
 		frame.setVisible(true);
-		
+
 		engine.start();
 	}
+	
 }
