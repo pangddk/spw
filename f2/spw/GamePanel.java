@@ -25,6 +25,7 @@ public class GamePanel extends JPanel {
 	BufferedImage bg03;
 	BufferedImage bonus;
 
+	Sound s = new Sound();
 	
 	public GamePanel() {
 		bi = new BufferedImage(400, 650, BufferedImage.TYPE_INT_ARGB);
@@ -67,6 +68,9 @@ public class GamePanel extends JPanel {
 	}
 
 	public void updateGameUI(GameReporter reporter){
+		
+		s.loop();
+
 		big.clearRect(0, 0, 400, 600);
 		
 		reporter.getScore();
@@ -77,11 +81,13 @@ public class GamePanel extends JPanel {
 		}
 
 		else if(reporter.getScore() >= 80000 && reporter.getScore() < 160000){
+			//Thread.sleep(2000);
 			big.setColor(Color.WHITE);
 			big.drawImage(bg02, 0, 0, 400, 650, null);	
 		}
 
 		else{
+			//Thread.sleep(2000);
 			big.setColor(Color.CYAN);
 			big.drawImage(bg03, 0, 0, 400, 650, null);
 		}
@@ -104,7 +110,7 @@ public class GamePanel extends JPanel {
 		else if(reporter.getHeart() == 1){
 			big.drawImage(h, 10, 10, 20, 20, null);
 		}
-		
+				
 		for(Sprite s : sprites){
 			s.draw(big);
 		}

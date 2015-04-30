@@ -19,6 +19,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private ArrayList<StrongEnemy> sEnemy = new ArrayList<StrongEnemy>();
 	private ArrayList<BossEnemy> bEnemy = new ArrayList<BossEnemy>();
+	private ArrayList<BossBullet> bBullet = new ArrayList<BossBullet>();
 
 	private SpaceShip v;	
 	
@@ -78,6 +79,11 @@ public class GameEngine implements KeyListener, GameReporter{
 		BossEnemy be = new BossEnemy(0, (int)(Math.random()*500)); 
 		gp.sprites.add(be);
 		bEnemy.add(be);
+	}
+	private void generateBossBullet(int x, int y){								
+		BossBullet bb = new BossBullet(x, y); 
+		gp.sprites.add(bb);
+		bBullet.add(bb);
 	}
 
 	private void process(){
@@ -152,11 +158,25 @@ public class GameEngine implements KeyListener, GameReporter{
 		while(be_iter.hasNext()){
 			BossEnemy be = be_iter.next();
 			be.proceed();
+			if(Math.random() < 0.1){
+				generateBossBullet((be.x + be.width/2), (be.y + be.height));
+			}
 			
 			if(!be.isAlive()){
 				be_iter.remove();
 				gp.sprites.remove(be);
 				score += 5000;
+			}
+		}
+		Iterator<BossBullet> bb_iter = bBullet.iterator();
+		while(bb_iter.hasNext()){
+			BossBullet bb = bb_iter.next();
+			bb.proceed();
+			
+			if(!bb.isAlive()){
+				bb_iter.remove();
+				gp.sprites.remove(bb);
+				score += 1000;
 			}
 		}
 
@@ -225,6 +245,7 @@ public class GameEngine implements KeyListener, GameReporter{
 					return;
 				}
 			}
+
 		}
 		Rectangle2D.Double ber;
 		for(BossEnemy be : bEnemy){
@@ -251,6 +272,29 @@ public class GameEngine implements KeyListener, GameReporter{
 						score += 5000;
 						be.notAlive();
 					}
+					return;
+				}
+			}
+		}
+		Rectangle2D.Double bbr;
+		for(BossBullet bb : bBullet){
+			bbr = bb.getRectangle();
+			if(bbr.intersects(vr)){
+				if(heart > 0){
+					bb.notAlive();
+					score -= 1000;
+					heart--;
+				}
+				else
+					die();
+				return;
+			}
+			Rectangle2D.Double br;			
+			for(Bullet b : bullets){			
+				br = b.getRectangle();
+				if(br.intersects(bbr)){
+					score += 1000;
+					bb.notAlive();
 					return;
 				}
 			}
